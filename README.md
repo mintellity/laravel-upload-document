@@ -7,7 +7,7 @@ This is a package for Laravel to easy upload documents to any model.
 You can install the package via composer:
 
 ```bash
-composer require mintellity/laravel-upload-document
+composer require mintellity/upload-document
 ```
 
 You can publish and run the migrations with:
