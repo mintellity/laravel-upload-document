@@ -4,19 +4,6 @@ This is a package for Laravel to easy upload documents to any model.
 
 ## Installation
 
-Add this repository to your `composer.json` file:
-```json
-{
-    "repositories": [
-        {
-            "type": "github",
-            "url": "https://github.com/mintellity/laravel-upload-document.git"
-        }
-    ]
-}
-```
-
-
 You can install the package via composer:
 
 ```bash
