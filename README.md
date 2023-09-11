@@ -20,7 +20,7 @@ Add this repository to your `composer.json` file:
 You can install the package via composer:
 
 ```bash
-composer require mintellity/upload-document
+composer require mintellity/laravel-upload-document
 ```
 
 You can publish and run the migrations with:
