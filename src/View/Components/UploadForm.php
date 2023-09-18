@@ -4,34 +4,48 @@ namespace Mintellity\UploadDocument\View\Components;
 
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Application;
 use Illuminate\View\Component;
+use Mintellity\UploadDocument\Helpers\ModelHelper;
 
 class UploadForm extends Component
 {
+    private array $default = [
+        'default' => 'Standard'
+    ];
+
     public function __construct(
-        public $modelType = null,
+        public $model = null,
+        public $selectedModel = null,
         public string $modelLabel = 'Modelltyp',
-        public Collection $models = new Collection,
-        public string|int|null $selectedModelId = null,
-        public string $collectionNameLabel = 'Dateityp',
-        public array|null $collectionNames = null,
-        public string|int|null $selectedCollectionName = 'default',
+        public string $collectionLabel = 'Dateityp',
         public array $allowedMimeTypes = ['.pdf'],
         public bool $multiple = false,
     )
     {
-        if ($this->modelType === null) {
-            $this->modelType = config('auth.providers.users.model');
-        }
-        if ($this->selectedModelId === null) {
-            $this->selectedModelId = auth()->id();
+
+        if (is_null($this->model) && !is_null($this->selectedModel)) {
+            foreach (ModelHelper::getAllModels() as $model) {
+                if ($this->selectedModel instanceof $model) {
+                    $this->model = $model;
+                }
+            }
         }
     }
 
     public function render(): View|Application|Factory
     {
-        return view('upload-document::components.upload-form');
+        $collection = app($this->model)->documentType;
+        $selectedCollection = null;
+        if (is_null($collection)) {
+            $selectedCollection = $this->default;
+        }
+
+        return view('upload-document::components.upload-form', [
+            'collection' => $collection,
+            'selectedCollection' => $selectedCollection,
+        ]);
     }
+
+
 }

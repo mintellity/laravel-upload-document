@@ -10,22 +10,17 @@ You can install the package via composer:
 composer require mintellity/upload-document
 ```
 
-You can publish and run the migrations with:
+You can publish the assets and migration:
 
 ```bash
-php artisan vendor:publish --tag="upload-document-migrations"
-php artisan migrate
+php artisan mintellity/upload-document:install
 ```
 
-You can publish the config file with:
+Optional you can publish the config and view files:
+
 
 ```bash
 php artisan vendor:publish --tag="upload-document-config"
-```
-
-Optionally, you can publish the views using
-
-```bash
 php artisan vendor:publish --tag="upload-document-views"
 ```
 
@@ -36,19 +31,28 @@ Add the trait to any model you want to has documents.
 use Mintellity\UploadDocument\Traits\InteractsWithDocuments;
 ```
 
+Optional add an array to any model you want to has a different document types.
+```php
+    /**
+     * @var array
+     */
+    public array $documentType = [
+        'first' => 'First',
+        'second' => 'Second',
+        'third' => 'Third',
+    ];
+```
+
 Add the component form in some view to upload documents.
 ```html
 <x-upload-document-upload-form/>
 ```
 There are many variables with which you can configure the component.
 ```html
-modelType - The model for which the document will be saved. Default model is User model.
-modelLabel - If there are many model for the user to choose from, a label will be shown. Default value is 'Modelltyp'.
-models - A collection from many models for the user to choose from.
-selectedModelId - Default selected model id.
-collectionNameLabel - If there are many collection names for the user to choose from, a label will be shown. Default value is 'Dateityp'.
-collectionNames - A collection from many collection names for the user to choose from.
-selectedCollectionName - Default selected collection name. Default value is 'default',
+model - A model linked to documents.
+model-label - A label for the models. Default value is 'Modelltyp'.
+selected-model - If the specific model is already chosen.
+collection-label - A label for the document types. Default value is 'Dateityp'.
 allowedMimeTypes - An array of allowed document types. Default value is '.pdf',
 multiple - Boolean value for allowing the users to upload multiple files. Default value is 'false'.
 ```
@@ -60,7 +64,8 @@ Add the component table in some view to show documents.
 There are also variables with which you can configure the component.
 ```html
 documents - A collection from documents.
-edit - Boolean value for allowing the users to update or delete the documents. Default value is 'false'.
+selected-model - If the specific model is already chosen.
+edit - Boolean value for allowing the users to update or delete the documents. Default value is 'true'.
 ```
 
 ## Changelog

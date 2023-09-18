@@ -20,7 +20,7 @@ class DocumentController extends Controller
      */
     public function upload(UploadDocumentRequest $request): RedirectResponse
     {
-        $data = $request->validated();
+        $data  = $request->validated();
         $files = $request->file('upload_document');
         DocumentService::store($files, $data);
 
@@ -29,26 +29,11 @@ class DocumentController extends Controller
 
     /**
      * @param Document $document
-     * @return BinaryFileResponse|RedirectResponse
-     */
-    public function view(Document $document): BinaryFileResponse|RedirectResponse
-    {
-        $filePath = $document->file_name;
-
-        if (Storage::exists($filePath)) {
-            return new BinaryFileResponse(Storage::path($filePath));
-        }
-
-        return redirect()->back()->with('error', 'Datei nicht gefunden.');
-    }
-
-    /**
-     * @param Document $document
      * @return StreamedResponse
      */
     public function download(Document $document): StreamedResponse|RedirectResponse
     {
-        $filePath = $document->file_name;
+        $filePath = DocumentService::getFilePath($document);
 
         if (Storage::exists($filePath)) {
             return Storage::download($filePath, $document->name);

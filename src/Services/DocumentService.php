@@ -16,14 +16,14 @@ class DocumentService
     {
         foreach ($files as $file) {
             $originalFilename = $file->getClientOriginalName();
-            $path = $file->storeAs(config('upload-document.storage_prefix'), $originalFilename);
+            $file->storeAs(config('upload-document.storage_prefix') . '/' . $params['model_id'], $originalFilename);
 
             Document::create([
                 'model_type'      => $params['model_type'],
                 'model_id'        => $params['model_id'],
                 'collection_name' => $params['collection_name'],
                 'name'            => pathinfo($originalFilename, PATHINFO_FILENAME),
-                'file_name'       => $path,
+                'file_name'       => $originalFilename,
                 'mime_type'       => $file->getClientMimeType(),
                 'size'            => $file->getSize()
             ]);
@@ -37,15 +37,16 @@ class DocumentService
      */
     public static function update($document, $data): void
     {
-        $currentFilePath = $document->file_name;
+        $currentFilePath = self::getFilePath($document);
 
         $newFilename = $data['name'] . '.' . pathinfo($currentFilePath, PATHINFO_EXTENSION);
+        $newPath     = config('upload-document.storage_prefix') . '/' . $document->model_id . '/' . $newFilename;
 
-        Storage::move($currentFilePath, config('upload-document.storage_prefix') . '/' . $newFilename);
+        Storage::move($currentFilePath, $newPath);
 
         $document->update([
-            'name' => $data['name'],
-            'file_name' => config('upload-document.storage_prefix') . '/' . $newFilename,
+            'name'      => $data['name'],
+            'file_name' => $newFilename,
         ]);
     }
 
@@ -55,12 +56,21 @@ class DocumentService
      */
     public static function destroy($document): void
     {
-        $filePath = $document->file_name;
+        $filePath = self::getFilePath($document);
 
         if (Storage::exists($filePath)) {
             Storage::delete($filePath);
         }
 
         $document->delete();
+    }
+
+    /**
+     * @param $document
+     * @return string
+     */
+    public static function getFilePath($document): string
+    {
+        return config('upload-document.storage_prefix') . '/' . $document->model_id . '/' . $document->file_name;
     }
 }

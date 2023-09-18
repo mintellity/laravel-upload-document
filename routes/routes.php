@@ -8,7 +8,6 @@ Route::controller(DocumentController::class)
      ->prefix('document')
      ->as('document.')
      ->group(function () {
-         Route::get('/view/{document}', 'view')->name('view');
          Route::get('/download/{document}', 'download')->name('download');
          Route::post('/upload', 'upload')->name('upload');
          Route::patch('/update/{document}', 'update')->name('update');

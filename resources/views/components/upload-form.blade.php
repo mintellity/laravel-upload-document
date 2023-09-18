@@ -8,50 +8,57 @@
                 </div>
             </div>
             <div class="card-body pt-5">
-                <input type="hidden" name="model_type" id="model_type" value="{{ $modelType }}">
+                <input type="hidden" name="model_type" id="model_type" value="{{ $model }}">
 
                 <!-- Select Model -->
-                @if($models->isNotEmpty())
+                @if($selectedModel)
+                    <input type="hidden" name="model_id" id="model_id" value="{{ $selectedModel->getKey() }}">
+                @else
                     <div class="row mb-6">
                         <div class="col-md-12 form-group">
                             <label class="fs-6 fw-bold form-label mt-3" for="model_id">
                                 {{ $modelLabel }}
                             </label>
-                            <select class="form-control form-control-solid" name="model_id" id="model_id">
+                            <select class="form-control form-control-solid @error('model_id') is-invalid @enderror"
+                                    name="model_id"
+                                    id="model_id">
                                 <option value="">Bitte auswählen</option>
-                                @foreach ($models as $model)
+                                @foreach ($model::all() as $model)
                                     <option value="{{ $model->getKey() }}">{{ $model }}</option>
                                 @endforeach
                             </select>
+                            @error('model_id')
+                            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
                         </div>
                     </div>
-                @else
-                    <input type="hidden"
-                           name="model_id"
-                           id="model_id"
-                           value="{{ $selectedModelId }}">
                 @endif
 
-                <!-- Select file type -->
-                @if($collectionNames)
+                <!-- Select document type -->
+                @if($collection)
                     <div class="row mb-6">
                         <div class="col-md-12 form-group">
                             <label class="fs-6 fw-bold form-label mt-3" for="collection_name">
-                                {{ $collectionNameLabel }}
+                                {{ $collectionLabel }}
                             </label>
-                            <select class="form-control form-control-solid" name="collection_name" id="collection_name">
+                            <select class="form-control form-control-solid @error('collection_name') is-invalid @enderror"
+                                    name="collection_name"
+                                    id="collection_name">
                                 <option value="">Bitte auswählen</option>
-                                @foreach ($collectionNames as $key => $name)
+                                @foreach ($collection as $key => $name)
                                     <option value="{{ $key }}">{{ $name }}</option>
                                 @endforeach
                             </select>
+                            @error('collection_name')
+                            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
                         </div>
                     </div>
                 @else
                     <input type="hidden"
                            name="collection_name"
                            id="collection_name"
-                           value="{{ $selectedCollectionName }}">
+                           value="{{ array_key_first($selectedCollection) }}">
                 @endif
 
                 <!-- Upload File -->
@@ -62,11 +69,14 @@
                                 Import Datei
                             </label>
                             <input type="file"
-                                   class="form-control form-control-solid"
+                                   class="form-control form-control-solid @error('upload_document.*') is-invalid @enderror"
                                    name="upload_document[]"
                                    id="upload_document"
                                    accept="{{ implode(', ', $allowedMimeTypes) }}"
                                    @if ($multiple) multiple @endif>
+                            @error('upload_document.*')
+                            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
                         </div>
                     </div>
                 </div>

@@ -6,6 +6,7 @@ use Mintellity\UploadDocument\View\Components\DocumentTable;
 use Mintellity\UploadDocument\View\Components\UploadForm;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Spatie\LaravelPackageTools\Commands\InstallCommand;
 
 class UploadDocumentServiceProvider extends PackageServiceProvider
 {
@@ -18,11 +19,17 @@ class UploadDocumentServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('upload-document')
-            ->hasViews()
             ->hasConfigFile()
-            ->hasRoutes('routes')
+            ->hasViews()
             ->hasViewComponent('upload-document', UploadForm::class)
             ->hasViewComponent('document-table', DocumentTable::class)
-            ->hasMigration('create_documents_table');
+            ->hasAssets()
+            ->hasRoutes('routes')
+            ->hasMigration('create_documents_table')
+            ->hasInstallCommand(function(InstallCommand $command) {
+                $command
+                    ->publishAssets()
+                    ->publishMigrations();
+            });;
     }
 }

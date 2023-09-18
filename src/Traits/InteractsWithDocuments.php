@@ -25,9 +25,16 @@ trait InteractsWithDocuments
      */
     public function getDocuments(string $collectionName = 'default'): Collection
     {
-        if ($collectionName === 'default') {
-            return $this->documents;
+        $documentsQuery = $this->documents();
+
+        if ($collectionName !== 'default') {
+            $documentsQuery->where('collection_name', $collectionName);
         }
-        return $this->documents()->where('collection_name', $collectionName)->get();
+
+        $documents = $documentsQuery->get();
+
+        $sortedDocuments = $documents->sortBy('name');
+
+        return $sortedDocuments->groupBy('collection_name');
     }
 }

@@ -5,6 +5,7 @@ namespace Mintellity\UploadDocument\Http\Requests;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Mintellity\UploadDocument\Rules\UniqueFileNameInStorage;
 
 class UploadDocumentRequest extends FormRequest
 {
@@ -35,6 +36,9 @@ class UploadDocumentRequest extends FormRequest
             'upload_document.*' => [
                 'required',
                 'file',
+                new UniqueFileNameInStorage(
+                    config('upload-document.storage_prefix') . '/' . $this->model_id
+                ),
             ],
         ];
     }
