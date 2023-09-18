@@ -13,7 +13,7 @@ composer require mintellity/upload-document
 You can publish the assets and migration:
 
 ```bash
-php artisan mintellity/upload-document:install
+php artisan upload-document:install
 ```
 
 Optional you can publish the config and view files:
@@ -66,6 +66,15 @@ There are also variables with which you can configure the component.
 documents - A collection from documents.
 selected-model - If the specific model is already chosen.
 edit - Boolean value for allowing the users to update or delete the documents. Default value is 'true'.
+```
+
+## Examples.
+```html
+<x-document-table-document-table :model="User::class" :model-label="'Choose from the list'" :multiple="true"/>
+<x-document-table-document-table :selected-model="User::first()" :collection-label="'Choose from the list'"/>
+
+<x-document-table-document-table :documents="auth()->user()->getDocuments()"/>
+<x-document-table-document-table :selected-model="User::first()" :edit="false"/>
 ```
 
 ## Changelog

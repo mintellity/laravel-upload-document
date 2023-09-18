@@ -29,7 +29,8 @@ class UploadDocumentServiceProvider extends PackageServiceProvider
             ->hasInstallCommand(function(InstallCommand $command) {
                 $command
                     ->publishAssets()
-                    ->publishMigrations();
+                    ->publishMigrations()
+                    ->askToRunMigrations();
             });;
     }
 }
