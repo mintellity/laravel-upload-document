@@ -2,7 +2,7 @@
     <div class="card">
         <div class="card-header pt-7">
             <div class="card-title">
-                <h2>Daten</h2>
+                <h2>Dokumente</h2>
             </div>
         </div>
         <div class="card-body pt-5">
