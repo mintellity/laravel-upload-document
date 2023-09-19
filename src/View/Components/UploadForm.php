@@ -11,7 +11,7 @@ use Mintellity\UploadDocument\Helpers\ModelHelper;
 class UploadForm extends Component
 {
     private array $default = [
-        'default' => 'Standard'
+        'Standard'
     ];
 
     public function __construct(

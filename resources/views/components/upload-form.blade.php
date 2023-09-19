@@ -45,8 +45,8 @@
                                     name="collection_name"
                                     id="collection_name">
                                 <option value="">Bitte auswählen</option>
-                                @foreach ($collection as $key => $name)
-                                    <option value="{{ $key }}">{{ $name }}</option>
+                                @foreach ($collection as $name)
+                                    <option value="{{ $name }}">{{ $name }}</option>
                                 @endforeach
                             </select>
                             @error('collection_name')

@@ -17,6 +17,11 @@
                 </thead>
                 <tbody class="fw-bold text-gray-600">
                 @foreach($documents as $key => $documentGroup)
+                    @if($documents->count() > 1)
+                        <tr class="text-center bg-gray-100">
+                            <td colspan="2">{{ $key }}</td>
+                        </tr>
+                    @endif
                     @foreach($documentGroup as $document)
                         <tr class="odd">
                             <form id="editDocumentForm"

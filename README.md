@@ -40,9 +40,9 @@ return [
         ]
     ],
     App\Models\User::class => [
-        'first' => 'First',
-        'second' => 'Second',
-        'third' => 'Third',
+        'First',
+        'Second',
+        'Third',
     ]
 ];
 ```
