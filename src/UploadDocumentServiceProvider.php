@@ -30,6 +30,7 @@ class UploadDocumentServiceProvider extends PackageServiceProvider
                 $command
                     ->publishAssets()
                     ->publishMigrations()
+                    ->publishConfigFile()
                     ->askToRunMigrations();
             });;
     }

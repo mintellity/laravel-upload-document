@@ -18,7 +18,7 @@ class UploadForm extends Component
         public $model = null,
         public $selectedModel = null,
         public string $modelLabel = 'Modelltyp',
-        public string $collectionLabel = 'Dateityp',
+        public string $collectionLabel = 'Gruppe',
         public array $allowedMimeTypes = ['.pdf'],
         public bool $multiple = false,
     )
@@ -33,19 +33,20 @@ class UploadForm extends Component
         }
     }
 
+    /**
+     * @return View|Application|Factory
+     */
     public function render(): View|Application|Factory
     {
-        $collection = app($this->model)->documentType;
-        $selectedCollection = null;
-        if (is_null($collection)) {
+        if (array_key_exists($this->model, config('upload-document'))) {
+            $collection = config('upload-document.' . $this->model);
+        } else {
             $selectedCollection = $this->default;
         }
 
         return view('upload-document::components.upload-form', [
-            'collection' => $collection,
-            'selectedCollection' => $selectedCollection,
+            'collection' => $collection ?? null,
+            'selectedCollection' => $selectedCollection ?? null,
         ]);
     }
-
-
 }

@@ -10,17 +10,15 @@ You can install the package via composer:
 composer require mintellity/upload-document
 ```
 
-You can publish the assets and migration:
+You can publish the asset, config and migration files:
 
 ```bash
 php artisan upload-document:install
 ```
 
-Optional you can publish the config and view files:
-
+Optional you can publish the view files:
 
 ```bash
-php artisan vendor:publish --tag="upload-document-config"
 php artisan vendor:publish --tag="upload-document-views"
 ```
 
@@ -31,16 +29,22 @@ Add the trait to any model you want to has documents.
 use Mintellity\UploadDocument\Traits\InteractsWithDocuments;
 ```
 
-Optional add an array to any model you want to has a different document types.
+Optional you can edit the config file. 
+The User array is used for different document types.
 ```php
-    /**
-     * @var array
-     */
-    public array $documentType = [
+return [
+    'storage_prefix' => 'upload',
+    'routes'         => [
+        'middleware' => [
+            'web'
+        ]
+    ],
+    App\Models\User::class => [
         'first' => 'First',
         'second' => 'Second',
         'third' => 'Third',
-    ];
+    ]
+];
 ```
 
 Add the component form in some view to upload documents.

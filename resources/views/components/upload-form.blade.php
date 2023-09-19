@@ -4,7 +4,7 @@
             @csrf
             <div class="card-header pt-7">
                 <div class="card-title">
-                    <h2>Daten importieren</h2>
+                    <h2>Dokumente hochladen</h2>
                 </div>
             </div>
             <div class="card-body pt-5">
