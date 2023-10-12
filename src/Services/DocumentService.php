@@ -36,7 +36,7 @@ class DocumentService
      * @param $collection
      * @return void
      */
-    public static function attach($filePath, $object, $collection): void
+    public function attach($filePath, $object, $collection): void
     {
         $originalFilename = pathinfo($filePath, PATHINFO_BASENAME);
         $newFilePath = self::getStoragePrefix($object->getKey()) . '/' . $originalFilename;
