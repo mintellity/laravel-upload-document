@@ -16,7 +16,7 @@ class DocumentService
     {
         foreach ($files as $file) {
             $originalFilename = $file->getClientOriginalName();
-            $file->storeAs(config('upload-document.storage_prefix') . '/' . $params['model_id'], $originalFilename);
+            $file->storeAs(config('upload-document.storage_prefix') . '/' . substr($params['model_id'],0,1) . '/' . $params['model_id'], $originalFilename);
 
             Document::create([
                 'model_type'      => $params['model_type'],
