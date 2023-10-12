@@ -16,7 +16,7 @@ class DocumentService
     {
         foreach ($files as $file) {
             $originalFilename = $file->getClientOriginalName();
-            $file->storeAs(config('upload-document.storage_prefix') . '/' . substr($params['model_id'],0,1) . '/' . $params['model_id'], $originalFilename);
+            $file->storeAs(self::getStoragePrefix($params['model_id']), $originalFilename);
 
             Document::create([
                 'model_type'      => $params['model_type'],
@@ -31,6 +31,31 @@ class DocumentService
     }
 
     /**
+     * @param $filePath
+     * @param $object
+     * @param $collection
+     * @return void
+     */
+    public function attach($filePath, $object, $collection): void
+    {
+        $originalFilename = pathinfo($filePath, PATHINFO_BASENAME);
+        $newFilePath = self::getStoragePrefix($object->getKey()) . '/' . $originalFilename;
+
+        Storage::disk('local')->move( $filePath, $newFilePath);
+        $file = Storage::disk('local')->path($newFilePath);
+
+        Document::create([
+            'model_type'      => get_class($object),
+            'model_id'        => $object->getKey(),
+            'collection_name' => $collection,
+            'name'            => pathinfo($originalFilename, PATHINFO_FILENAME),
+            'file_name'       => $originalFilename,
+            'mime_type'       => mime_content_type($file),
+            'size'            => filesize($file)
+        ]);
+    }
+
+    /**
      * @param $document
      * @param $data
      * @return void
@@ -40,7 +65,7 @@ class DocumentService
         $currentFilePath = self::getFilePath($document);
 
         $newFilename = $data['name'] . '.' . pathinfo($currentFilePath, PATHINFO_EXTENSION);
-        $newPath     = config('upload-document.storage_prefix') . '/' . $document->model_id . '/' . $newFilename;
+        $newPath     = self::getStoragePrefix($document->model_id) . '/' . $newFilename;
 
         Storage::move($currentFilePath, $newPath);
 
@@ -71,6 +96,15 @@ class DocumentService
      */
     public static function getFilePath($document): string
     {
-        return config('upload-document.storage_prefix') . '/' . $document->model_id . '/' . $document->file_name;
+        return self::getStoragePrefix($document->model_id) . '/' . $document->file_name;
+    }
+
+    /**
+     * @param $objectId
+     * @return string
+     */
+    public static function getStoragePrefix($objectId): string
+    {
+        return substr($objectId,0,1) . '/' . $objectId . '/';
     }
 }

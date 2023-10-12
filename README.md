@@ -33,16 +33,15 @@ Optional you can edit the config file.
 The User array is used for different document types.
 ```php
 return [
-    'storage_prefix' => 'upload',
     'routes'         => [
         'middleware' => [
             'web'
         ]
     ],
     App\Models\User::class => [
-        'First',
-        'Second',
-        'Third',
+        'first'  => 'First',
+        'second' => 'Second',
+        'third'  => 'Third',
     ]
 ];
 ```
