@@ -2,7 +2,6 @@
 
 namespace Mintellity\UploadDocument\Services;
 
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Mintellity\UploadDocument\Models\Document;
 
@@ -40,10 +39,9 @@ class DocumentService
     public static function attach($filePath, $object, $collection): void
     {
         $originalFilename = pathinfo($filePath, PATHINFO_BASENAME);
+        $newFilePath      = self::getStoragePrefix($object->getKey()) . '/' . $originalFilename;
 
-        $newFilePath = Storage::path(substr($object->getKey(),0,1) . '/' . $object->getKey() . '/' . $originalFilename);
-
-        File::move($filePath, $newFilePath);
+        Storage::put($newFilePath, Storage::get($filePath));
 
         Document::create([
             'model_type'      => get_class($object),
@@ -51,8 +49,8 @@ class DocumentService
             'collection_name' => $collection,
             'name'            => pathinfo($originalFilename, PATHINFO_FILENAME),
             'file_name'       => $originalFilename,
-            'mime_type'       => File::mimeType($newFilePath),
-            'size'            => File::size($newFilePath)
+            'mime_type'       => Storage::mimeType($newFilePath),
+            'size'            => Storage::fileSize($newFilePath)
         ]);
     }
 
