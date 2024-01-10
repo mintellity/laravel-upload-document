@@ -34,14 +34,19 @@ class DocumentService
      * @param $filePath
      * @param $object
      * @param $collection
+     * @param $sourceFileSystem
      * @return void
      */
-    public static function attach($filePath, $object, $collection): void
+    public static function attach($filePath, $object, $collection, $sourceFileSystem = null): void
     {
+        if(is_null($sourceFileSystem))
+        {
+            $sourceFileSystem = env('FILESYSTEM_DRIVER');
+        }
         $originalFilename = pathinfo($filePath, PATHINFO_BASENAME);
         $newFilePath      = self::getStoragePrefix($object->getKey()) . '/' . $originalFilename;
 
-        Storage::put($newFilePath, Storage::get($filePath));
+        Storage::put($newFilePath, Storage::disk($sourceFileSystem)->get($filePath));
 
         Document::create([
             'model_type'      => get_class($object),
