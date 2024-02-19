@@ -36,7 +36,7 @@ class DocumentController extends Controller
         $filePath = DocumentService::getFilePath($document);
 
         if (Storage::exists($filePath)) {
-            return Storage::download($filePath, $document->document_name);
+            return Storage::download($filePath);
         }
 
         return redirect()->back()->with('error', 'Datei nicht gefunden.');
